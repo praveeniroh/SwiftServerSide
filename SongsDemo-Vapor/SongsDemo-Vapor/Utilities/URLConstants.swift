@@ -1,0 +1,32 @@
+//
+//  URLConstants.swift
+//  SongsDemo-Vapor
+//
+//  Created by praveen-12298 on 15/02/25.
+//
+
+import Foundation
+
+let hostName: String = "localhost"
+let port: Int = 8080
+let baseURL: String = "http://\(hostName):\(port)"
+
+enum Endpoint: String {
+    case songs = "songs"
+}
+
+
+func generateURL(for endpoints: [Endpoint]) throws -> URL {
+    guard !endpoints.isEmpty else{
+        throw HTTPError.invalidURL
+    }
+    var path:String = ""
+    for endpoint in endpoints {
+        path.append("/\(endpoint.rawValue)")
+    }
+
+    guard let url = URL(string: "\(baseURL)\(path)") else {
+        throw HTTPError.invalidURL
+    }
+    return url
+}
