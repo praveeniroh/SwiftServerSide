@@ -1,0 +1,29 @@
+//
+//  Song.swift
+//  VaporServer
+//
+//  Created by praveen-12298 on 15/02/25.
+//
+
+import Vapor
+import Fluent
+
+///Using `**@unchecked Sendable**` to avoid Swift-6 warning
+///Stored property '\_id' of 'Sendable'-conforming class 'Song' is mutable; this is an error in the Swift 6 language mode
+///We are bypassing the sendable check (must ensure that value is not mutated in future)
+final class Song : Model, Content,@unchecked Sendable{
+    static let schema: String = "songs"
+
+    @ID(custom: .id, generatedBy: .database)
+    var id: Int?
+
+    @Field(key: "title")
+    var title: String
+
+    init() {}
+
+    init(id: Int? = nil, title: String) {
+        self.id = id
+        self.title = title
+    }
+}
