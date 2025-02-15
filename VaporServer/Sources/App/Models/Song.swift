@@ -14,15 +14,15 @@ import Fluent
 final class Song : Model, Content,@unchecked Sendable{
     static let schema: String = "songs"
 
-    @ID(custom: .id, generatedBy: .database)
-    var id: Int?
+    @ID(custom: .id)
+    var id: UUID? //TODO: If non UUID type provided, then the DB not creating ID.
 
     @Field(key: "title")
     var title: String
 
     init() {}
 
-    init(id: Int? = nil, title: String) {
+    init(id: UUID? = nil, title: String) {
         self.id = id
         self.title = title
     }
