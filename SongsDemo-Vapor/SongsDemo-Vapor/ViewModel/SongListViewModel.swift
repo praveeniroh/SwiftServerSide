@@ -7,23 +7,18 @@
 
 import Foundation
 
+@MainActor
 class SongListViewModel : ObservableObject {
-    @Published var songs: [Song] =  [
-        .init(id: UUID(), title: "New york nagaram"),
-        .init(id: UUID(), title: "Mudhal nee mudivum nee")
-    ]
+    @Published var songs: [Song] =  []
 
-    func fetchSongs() async throws -> [Song]{
+    func fetchSongs() async throws{
         do{
             let url = try generateURL(for: [.songs])
             let songs : [Song] = try await HTTPClient.shared.fetchData(from: url)
-            return songs
+            self.songs = songs
         }catch{
             print(">>> Error: \(error)")
-            return [
-                .init(id: UUID(), title: "New york nagaram"),
-                .init(id: UUID(), title: "Mudhal nee mudivum nee")
-            ]
+            throw error
         }
     }
 }

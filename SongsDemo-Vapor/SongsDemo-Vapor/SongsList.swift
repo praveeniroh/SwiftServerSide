@@ -15,10 +15,16 @@ struct SongsList: View {
                 Text(song.title)
             }
             .navigationTitle("Songs")
+            .refreshable {
+                try? await viewModel.fetchSongs()
+            }
         }, detail: {
             Color.gray
         })
         .navigationSplitViewStyle(.balanced)
+        .task {
+            try? await viewModel.fetchSongs()
+        }
 
     }
 }
