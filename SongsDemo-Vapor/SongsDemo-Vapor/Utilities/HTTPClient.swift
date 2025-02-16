@@ -51,4 +51,14 @@ struct HTTPClient {
             throw HTTPError.invalidResponse
         }
     }
+
+    func deleteData(from url:URL) async throws {
+        var request = URLRequest(url: url)
+        request.httpMethod = HttpMethod.DELETE.rawValue
+        
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard let httpReponse = response as? HTTPURLResponse, httpReponse.statusCode == 200 else {
+            throw HTTPError.invalidResponse
+        }
+    }
 }

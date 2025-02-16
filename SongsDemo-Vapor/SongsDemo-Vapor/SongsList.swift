@@ -14,6 +14,12 @@ struct SongsList: View {
         NavigationSplitView(sidebar: {
             List(viewModel.songs, id: \.id) { song in
                 Text(song.title)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
+                        Button("Delete") {
+                            print("Delete pressed")
+                            viewModel.deleteSong(song: song)
+                        }
+                    })
             }
             .navigationTitle("Songs")
             .refreshable {

@@ -21,4 +21,19 @@ class SongListViewModel : ObservableObject {
             throw error
         }
     }
+
+    func deleteSong(song:Song){
+        Task{
+            do{
+                guard let id = song.id else {
+                    throw SongError.idNil
+                }
+                let url = try generateURL(for: [.songs,.custom(id.uuidString)])
+                try await HTTPClient.shared.deleteData(from: url)
+                try await self.fetchSongs()
+            }catch{
+                print(">>> Error: \(error)")
+            }
+        }
+    }
 }

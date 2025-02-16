@@ -7,4 +7,5 @@
 
 enum SongError: Error {
     case emptyName
+    case idNil
 }
