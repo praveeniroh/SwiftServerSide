@@ -13,6 +13,18 @@ enum HTTPError : Error{
     case invalidData
 }
 
+enum HttpMethod: String {
+    case POST, GET, PUT, DELETE
+}
+
+enum MIMEType: String {
+    case JSON = "application/json"
+}
+
+enum HttpHeader: String {
+    case contentType = "Content-Type"
+}
+
 
 struct HTTPClient {
     static let shared = HTTPClient()
@@ -25,5 +37,18 @@ struct HTTPClient {
             throw HTTPError.invalidResponse
         }
         return try JSONDecoder().decode(T.self, from: data)
+    }
+
+    func postData<T:Codable>(to url:URL,objec:T,method:HttpMethod) async throws{
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        request.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HttpHeader.contentType.rawValue)
+        request.httpBody = try JSONEncoder().encode(objec)
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpReponse = response as? HTTPURLResponse, httpReponse.statusCode == 200 else {
+            throw HTTPError.invalidResponse
+        }
     }
 }
