@@ -28,7 +28,7 @@ final class AddUpdateViewModel : ObservableObject {
         Task{
             do{
                 if isUpdating{
-
+                    try await updateSong()
                 }else{
                     try await addSong()
                 }
@@ -47,5 +47,22 @@ final class AddUpdateViewModel : ObservableObject {
         let song = Song(id: nil, title: songName)
         let url = try generateURL(for: [.songs])
         try await HTTPClient.shared.postData(to: url, objec: song, method: .POST)
+    }
+
+    private func updateSong() async throws{
+
+        guard !songName.isEmpty else{
+            throw SongError.emptyName
+        }
+
+        do{
+            let song = Song(id: uuid, title: songName)
+            let url = try generateURL(for: [.songs])
+            try await HTTPClient.shared.updateData(to: url, object: song, method: .PUT)
+
+        }catch{
+            print(">>> updateSong error: \(error)")
+            throw error
+        }
     }
 }

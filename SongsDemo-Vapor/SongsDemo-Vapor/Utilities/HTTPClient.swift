@@ -52,10 +52,23 @@ struct HTTPClient {
         }
     }
 
+    ///DELETE songs/<ID>
     func deleteData(from url:URL) async throws {
         var request = URLRequest(url: url)
         request.httpMethod = HttpMethod.DELETE.rawValue
         
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard let httpReponse = response as? HTTPURLResponse, httpReponse.statusCode == 200 else {
+            throw HTTPError.invalidResponse
+        }
+    }
+
+    func updateData<T:Codable>(to url:URL,object:T,method:HttpMethod) async throws {
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        request.addValue(MIMEType.JSON.rawValue, forHTTPHeaderField: HttpHeader.contentType.rawValue)
+        request.httpBody = try JSONEncoder().encode(object)
+
         let (_, response) = try await URLSession.shared.data(for: request)
         guard let httpReponse = response as? HTTPURLResponse, httpReponse.statusCode == 200 else {
             throw HTTPError.invalidResponse

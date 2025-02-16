@@ -14,11 +14,19 @@ struct SongsList: View {
         NavigationSplitView(sidebar: {
             List(viewModel.songs, id: \.id) { song in
                 Text(song.title)
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
                         Button("Delete") {
                             print("Delete pressed")
                             viewModel.deleteSong(song: song)
                         }
+                        .tint(.red.opacity(0.2))
+
+                        Button("Update") {
+                            print("Delete pressed")
+                            modal = .update(song)
+                        }
+                        .tint(.green.opacity(0.2))
+
                     })
             }
             .navigationTitle("Songs")
@@ -48,8 +56,9 @@ struct SongsList: View {
             switch modal{
             case .add:
                 AddUpdateView()
-            case .update(_):
-                AddUpdateView()
+            case .update(let song):
+                let viewModel = AddUpdateViewModel(song: song)
+                AddUpdateView(viewModel: viewModel)
             }
         })
     }
