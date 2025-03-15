@@ -17,6 +17,15 @@ struct SongController : RouteCollection{
         songs.group(":id"){song in
             song.delete(use: delete(request:))
         }
+
+        ///http://127.0.0.1:8080/songs/demo/<any value>
+        ///We can parse the dynamic content
+        songs.get("demo",":author", use: {request in
+            let author = request.parameters.get("author") ?? "**"
+            return "Author of the song is \(author)"
+        })
+        .description("This is description")
+
     }
 
     @Sendable
