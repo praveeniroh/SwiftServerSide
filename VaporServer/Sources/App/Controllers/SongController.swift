@@ -28,8 +28,17 @@ struct SongController : RouteCollection{
 
     }
 
+    ///GET song?title=<value>
+    ///Returns songs that contains query else returns all songs
+
     @Sendable
     private func index(request:Request) throws -> EventLoopFuture<[Song]> {
+        if let query = try? request.query.decode(SongQuery.self).title{
+            //TODO: query taken from ChatGPT. Have to explore
+           return Song.query(on: request.db)
+                .filter(\.$title, .custom("ILIKE"), "%\(query)%")
+                .all()
+        }
         return Song.query(on: request.db).all()
     }
 

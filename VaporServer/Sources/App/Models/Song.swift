@@ -27,3 +27,7 @@ final class Song : Model, Content,@unchecked Sendable{
         self.title = title
     }
 }
+
+final class SongQuery : Content,@unchecked Sendable{
+    var title:String?
+}
