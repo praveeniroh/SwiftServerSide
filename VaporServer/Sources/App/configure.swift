@@ -18,6 +18,7 @@ public func configure(_ app: Application) async throws {
     ), as: .psql)
 
     app.migrations.add(CreateSongs())
+    app.migrations.add(SongsWithImage())
 
     //`autoMigrate().wait()` - Not supported in swift 6
     try await app.autoMigrate().get()

@@ -11,4 +11,8 @@ func routes(_ app: Application) throws {
     }
 
     try app.register(collection: SongController())
+    try app.register(collection: SongImageController())
+
+    //`app.routes.all` prints all routes
+    print(app.routes.all)
 }
