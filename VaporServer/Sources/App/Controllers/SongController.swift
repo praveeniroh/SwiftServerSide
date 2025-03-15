@@ -35,9 +35,13 @@ struct SongController : RouteCollection{
 
     @Sendable
     private func create(request:Request) throws -> EventLoopFuture<HTTPStatus> {
-        let song = try request.content.decode(Song.self)
-        return song.create(on: request.db)
-            .transform(to: .ok) //Returning HTTTP 200
+        do{
+            let song = try request.content.decode(Song.self)
+            return song.create(on: request.db)
+                .transform(to: .ok) //Returning HTTTP 200
+        }catch{
+            throw Abort(.badRequest, reason: "Not able to parse JSON, \(error.localizedDescription)")
+        }
     }
 
     @Sendable

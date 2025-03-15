@@ -7,7 +7,7 @@
 
 import Foundation
 
-let hostName: String = "192.168.1.6"
+let hostName: String = "10.15.109.42"
 let port: Int = 8080
 let baseURL: String = "http://\(hostName):\(port)"
 
